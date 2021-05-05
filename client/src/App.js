@@ -8,10 +8,14 @@ import Popper from 'popper.js';
 
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import Header from './components/Header/Header';
-import Main from './components/unlogin/Main';
-// import Wallet from './components/Wallet/Wallet';
-import Login from './components/Login/Login';
-import Register from './components/Login/Register';
+import Main from './components/Main/Main';
+import Login from './components/User/Login';
+import Register from './components/User/Register';
+import Profile from './components/User/Profile';
+import AddMoney from './components/Main/Authorize/Wallet/AddMoney';
+import ProgramPage from './components/Main/Programs/ProgramPage';
+import ModeratorPrograms from './components/Moderator/Programs/Programs';
+import Moderators from './components/Moderator/Moderators/Moderators';
 
 function App() {
   class ProtectedRouteUnAuthroize extends Component {
@@ -24,7 +28,7 @@ function App() {
           render={props => (
             localStorage.getItem('jwtToken') ?
               <Component {...props} /> :
-              <Redirect to='/login' />
+              <Redirect to='/' />
           )} 
         />
       )
@@ -50,22 +54,18 @@ function App() {
   }
 
   return (
-    // <div className="App">
-    //   <Header />
-    //   <Main />
-    //   <Wallet />
-
-      
-    // </div>
-
     <Router>
     <div>
-     <Header />
+    <Header />
     <Switch>
       <ProtectedRouteAuthroize exact path="/register" component={Register}></ProtectedRouteAuthroize>
       <ProtectedRouteAuthroize exact path="/login" component={Login}></ProtectedRouteAuthroize>
-      {/* <ProtectedRouteUnAuthroize exact path="/update_profile" component={UpdateProfile}></ProtectedRouteUnAuthroize> */}
-      <ProtectedRouteUnAuthroize exact path="/"  component={Main}></ProtectedRouteUnAuthroize>
+      <Route exact path="/"  component={Main}></Route>
+      <ProtectedRouteUnAuthroize exact path="/profile"  component={Profile}></ProtectedRouteUnAuthroize>
+      <ProtectedRouteUnAuthroize exact path="/add_money"  component={AddMoney}></ProtectedRouteUnAuthroize>
+      <ProtectedRouteUnAuthroize exact path="/program/:id"  component={ProgramPage}></ProtectedRouteUnAuthroize>
+      <ProtectedRouteUnAuthroize exact path="/got_mode/programs"  component={ModeratorPrograms}></ProtectedRouteUnAuthroize>
+      <ProtectedRouteUnAuthroize exact path="/got_mode/moderators"  component={Moderators}></ProtectedRouteUnAuthroize>
     </Switch>
     </div>
     </Router>

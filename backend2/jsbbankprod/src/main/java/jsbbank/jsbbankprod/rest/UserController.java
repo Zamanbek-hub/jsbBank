@@ -1,8 +1,10 @@
 package jsbbank.jsbbankprod.rest;
 
+import jsbbank.jsbbankprod.entities.Invest;
 import jsbbank.jsbbankprod.entities.Roles;
 import jsbbank.jsbbankprod.entities.Users;
 import jsbbank.jsbbankprod.entities.helpers.UserRequest;
+import jsbbank.jsbbankprod.services.InvestService;
 import jsbbank.jsbbankprod.services.RolesService;
 import jsbbank.jsbbankprod.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.sql.Date;
+import java.util.Map;
 
 @RestController
 @CrossOrigin("*")
@@ -25,6 +29,10 @@ public class UserController {
 
     @Autowired
     private RolesService rolesService;
+
+    @Autowired
+    private InvestService investService;
+
 
 
     @PostMapping("/register")
@@ -98,4 +106,28 @@ public class UserController {
         System.out.println("I WAS HERE RETURN NULL");
         return null;
     }
+
+    @PostMapping(value = "/add_money")
+    public void addMoney(@RequestBody Map<String, String> payload){
+        Users user = getUser();
+        assert user != null;
+
+        double added = Double.parseDouble(payload.get("amount"));
+        Date date = new Date(System.currentTimeMillis());
+        Invest invest = new Invest();
+        invest.setAmount(added);
+        invest.setPaid(true);
+        invest.setStamp(date);
+        invest.setDate(date);
+        invest.setUser(user);
+        investService.saveInvest(invest);
+        System.out.println(invest);
+
+        double wallet = user.getWallet() + added;
+        user.setWallet(wallet);
+        userService.saveUser(user);
+        System.out.println(user);
+    }
+
+
 }

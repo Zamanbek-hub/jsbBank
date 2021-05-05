@@ -36,6 +36,7 @@ function Login() {
         axios.post(LOGIN_API,  loginData )
           .then(res => {
             localStorage.setItem('jwtToken', res['data']['jwtToken']);
+            localStorage.setItem('email', loginData.email);
             history.push("")
         }).catch(err=> {
             console.log(err)

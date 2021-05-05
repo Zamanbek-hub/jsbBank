@@ -1,13 +1,15 @@
-import React from 'react'
+import React from 'react';
+import './UnAuthorizeMain.css';
+import {Link} from 'react-router-dom';
 
-function Main() {
+function UnAuthorizeMain() {
     const img_style = {
         width: '100%',
         height: '600px'
     }
 
     return (
-        <div className="container-fluid mt-5">
+        <div className='container'>
             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                 <ol className="carousel-indicators">
                     <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -17,12 +19,21 @@ function Main() {
                 <div className="carousel-inner">
                     <div className="carousel-item active">
                         <img src="/images/unregister_main_1.jpeg" style={img_style} alt=""/>
+                        <Link to='login'>
+                            <button className='program_get'>Подать заявку</button>
+                        </Link>
                     </div>
                     <div className="carousel-item">
-                    <img src="/images/unregister_main_2.jpeg" style={img_style} alt=""/>
+                        <img src="/images/unregister_main_2.jpeg" style={img_style} alt=""/>
+                        <Link to='login'>
+                            <button className='program_get'>Подать заявку</button>
+                        </Link>
                     </div>
                     <div className="carousel-item">
-                    <img src="/images/unregister_main_3.jpeg" style={img_style} alt=""/>
+                        <img src="/images/unregister_main_3.jpeg" style={img_style} alt=""/>
+                        <Link to='login'>
+                            <button className='program_get'>Подать заявку</button>
+                        </Link>
                     </div>
                 </div>
                 <a className="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -38,4 +49,4 @@ function Main() {
     )
 }
 
-export default Main
+export default UnAuthorizeMain

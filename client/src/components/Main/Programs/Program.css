@@ -1,0 +1,10 @@
+.more_button{
+    background-color: #7B7B7B;
+    color: white;
+    border: 0px;
+    border-bottom: 2px solid black;
+}
+
+.more_button hover{
+    background-color: #F17B4A;
+}

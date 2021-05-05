@@ -1,0 +1,61 @@
+.header_text{
+    color: #008B8A,
+}
+
+.program_img_div{
+    width: 100%;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.program_img{
+    width: 80%;
+    height: 350px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.program_text{
+    color: #026363;
+}
+
+.program_big_info{
+    color: #026363;
+    font-size: 60px;
+}
+
+.info_block p h3 {
+    color: #026363;
+}
+
+.info_block{
+    height: 200px;
+}
+
+.conditions{
+    font-weight: bold;
+}
+
+.program_take{
+    background-color: #F17441;
+    color: white;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
+    border-bottom: 3px solid grey;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.program_take:hover{
+    background-color: #CF6824;
+    border: 3px solid grey;
+    text-decoration: none;
+}

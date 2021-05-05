@@ -1,0 +1,13 @@
+.circular {
+    width: 200px;
+    height: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.circular_out_div {
+    margin-top: 20%;
+    margin-left: auto;
+    margin-right: auto;
+}

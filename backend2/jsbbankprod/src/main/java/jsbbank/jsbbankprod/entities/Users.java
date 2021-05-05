@@ -39,6 +39,7 @@ public class Users implements UserDetails {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Roles> roles;
 
+
     public Users(String email, String password, String full_name, String iin, double wallet, List<Roles> roles) {
         this.email = email;
         this.password = password;
