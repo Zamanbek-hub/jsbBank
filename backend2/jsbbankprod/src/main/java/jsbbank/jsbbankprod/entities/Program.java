@@ -49,9 +49,6 @@ public class Program {
     @Column(name = "stamp")
     private Date stamp;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<Users> users;
-
     @Override
     public String toString() {
         return "Program{" +

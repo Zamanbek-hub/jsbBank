@@ -29,17 +29,6 @@ public class InvestController {
     @Autowired
     private InvestService investService;
 
-    private Users getUser(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(!(authentication instanceof AnonymousAuthenticationToken)){
-            Users user = (Users) authentication.getPrincipal();
-            System.out.println("I WAS HERE1");
-            return user;
-        }
-        System.out.println("I WAS HERE RETURN NULL");
-        return null;
-    }
-
     @GetMapping(value = "/my_last")
     public Invest profilePage(){
         Users user = getUser();
@@ -48,6 +37,15 @@ public class InvestController {
             return invests.get(invests.size() - 1);
         }
 
+        return null;
+    }
+
+    private Users getUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(!(authentication instanceof AnonymousAuthenticationToken)){
+            Users user = (Users) authentication.getPrincipal();
+            return user;
+        }
         return null;
     }
 }

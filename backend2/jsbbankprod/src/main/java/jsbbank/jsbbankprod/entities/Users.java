@@ -39,6 +39,9 @@ public class Users implements UserDetails {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Roles> roles;
 
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<Program> programs;
+
 
     public Users(String email, String password, String full_name, String iin, double wallet, List<Roles> roles) {
         this.email = email;

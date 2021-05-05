@@ -21,7 +21,7 @@ function Program({props}) {
                 <div className="card-body text-center">
                     <h4 className="card-title">{props.title}</h4>
                     <div className="mt-5">
-                        <Link to={`program/1`}>
+                        <Link to={`/god_mode/program/${props.id}`}>
                             <button type="button mt-3" className='btn btn-warning more_button'>Подробнее</button>
                         </Link>
                     </div>

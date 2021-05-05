@@ -1,0 +1,19 @@
+.add_form{
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.program_add_img{
+    width: 400px;
+    height: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    border: 1px solid black;
+}
+
+.program_add_btn{
+    float: right;
+}

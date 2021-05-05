@@ -1,0 +1,27 @@
+.avatar_img{
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.moderator_form{
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.moderator_form_div{
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+
+}
+
+.role_text{
+    font-size: 20px;
+    font-weight: 500;
+}

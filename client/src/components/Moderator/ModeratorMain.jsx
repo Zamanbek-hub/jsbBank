@@ -1,5 +1,8 @@
 import React from 'react';
+import axios from "axios";
 import './ModeratorMain.css';
+import { useState,  useEffect } from 'react';
+
 
 
 function ModeratorMain() {
@@ -10,13 +13,34 @@ function ModeratorMain() {
         document.body.style.backgroundColor = "white";
     }
 
-        
+    const PROGRAM_ADD_API = "http://localhost:8000/roles/have_role";
+
+    const [role, setRole] = useState({});
+    const checkRole = (role) => {
+        const headers = {
+            "Authorization": `Bearer ${localStorage.getItem('jwtToken')}`
+        }
+
+        axios.get(PROGRAM_ADD_API+`?role=${role}`, {headers: headers}).then(res => {
+            setRole({have:res.data})
+        });
+    }
+
+    useEffect(() => {
+        checkRole("PROGRAM_CHANGE_1");
+    }, []);
+
+    console.log("role =");
+    console.log(role)
+
     return (
         <div>
             <div id="mySidenav" class="sidenav">
                 <a href="javascript:void(0)" class="closebtn"  onClick={e => { e.preventDefault(); closeNav()}}>&times;</a>
-                <a href="/got_mode/programs">Programs</a>
-                <a href="/got_mode/moderators">Moderators</a>
+                <a href="/god_mode/programs">Programs</a>
+                {role.have &&
+                    <a href="/god_mode/moderators">Moderators</a>
+                }
             </div>
             <div id="main">
             </div>

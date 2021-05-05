@@ -1,5 +1,7 @@
-import React from 'react'
-import Program from './Program'
+import React from 'react';
+import Program from './Program';
+import axios from "axios";
+import { useState,  useEffect } from 'react';
 
 
 function Programs() {
@@ -8,12 +10,26 @@ function Programs() {
         marginLeft: 'auto'
     }
 
+    const PROGRAMS_GET_API = "http://localhost:8000/program/all";
+
+    const [programs, setPrograms] = useState([]);
+    const getPrograms = () => {
+        const headers = {
+            "Authorization": `Bearer ${localStorage.getItem('jwtToken')}`
+        }
+
+        axios.get(PROGRAMS_GET_API, {headers:headers}).then(res => {
+            setPrograms(res.data);
+        });
+    }
+
+    useEffect(() => {
+        getPrograms();
+    }, []);
+
     return (
         <div className='container row mt-5' style={carousel_style}>
-            <Program props={{title: 'Бақытты отбасы', path:'/images/programs/program_1.jpeg'}}/>
-            <Program props={{title: 'Title', path:'/images/programs/program_default.jpeg'}}/>
-            <Program props={{title: 'Title', path:'/images/programs/program_default.jpeg'}}/>
-            <Program props={{title: 'Title', path:'/images/programs/program_default.jpeg'}}/>
+            {programs.map((program, i) => <Program props={{title: program.name, id:program.id, path:'/images/programs/program_1.jpeg'}}/>)}
         </div>
     )
 }

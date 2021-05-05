@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.sql.Date;
 import java.util.Map;
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -96,14 +97,33 @@ public class UserController {
         return getUser();
     }
 
+    @GetMapping(value = "/get_moderators")
+    public List<Users> getModerators(){
+        List<Users> users = userService.findAll();
+        users.remove(getUser());
+        List<Users> moderators = new ArrayList<>();
+
+        for(Users user: users){
+            List<Roles> roles = user.getRoles();
+            if(roles.contains(rolesService.getRole("ROLE_MODERATOR"))){
+                moderators.add(user);
+            }
+        }
+
+        return moderators;
+    }
+
+    @GetMapping(value = "/get_user")
+    public Users getUser(@RequestParam("id") Long id){
+        return userService.findById(id);
+    }
+
     private Users getUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(!(authentication instanceof AnonymousAuthenticationToken)){
             Users user = (Users) authentication.getPrincipal();
-            System.out.println("I WAS HERE1");
             return user;
         }
-        System.out.println("I WAS HERE RETURN NULL");
         return null;
     }
 
@@ -128,6 +148,5 @@ public class UserController {
         userService.saveUser(user);
         System.out.println(user);
     }
-
 
 }

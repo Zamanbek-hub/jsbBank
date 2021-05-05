@@ -16,6 +16,9 @@ import AddMoney from './components/Main/Authorize/Wallet/AddMoney';
 import ProgramPage from './components/Main/Programs/ProgramPage';
 import ModeratorPrograms from './components/Moderator/Programs/Programs';
 import Moderators from './components/Moderator/Moderators/Moderators';
+import ProgramsAdd from './components/Moderator/Programs/ProgramsAdd/ProgramsAdd';
+import ProgramsEdit from './components/Moderator/Programs/ProgramsEdit/ProgramsEdit';
+import ModeratorsEdit from './components/Moderator/Moderators/ModeratorsEdit/ModeratorsEdit';
 
 function App() {
   class ProtectedRouteUnAuthroize extends Component {
@@ -64,8 +67,11 @@ function App() {
       <ProtectedRouteUnAuthroize exact path="/profile"  component={Profile}></ProtectedRouteUnAuthroize>
       <ProtectedRouteUnAuthroize exact path="/add_money"  component={AddMoney}></ProtectedRouteUnAuthroize>
       <ProtectedRouteUnAuthroize exact path="/program/:id"  component={ProgramPage}></ProtectedRouteUnAuthroize>
-      <ProtectedRouteUnAuthroize exact path="/got_mode/programs"  component={ModeratorPrograms}></ProtectedRouteUnAuthroize>
-      <ProtectedRouteUnAuthroize exact path="/got_mode/moderators"  component={Moderators}></ProtectedRouteUnAuthroize>
+      <ProtectedRouteUnAuthroize exact path="/god_mode/programs"  component={ModeratorPrograms}></ProtectedRouteUnAuthroize>
+      <ProtectedRouteUnAuthroize exact path="/god_mode/moderators"  component={Moderators}></ProtectedRouteUnAuthroize>
+      <ProtectedRouteUnAuthroize exact path="/god_mode/program_add"  component={ProgramsAdd}></ProtectedRouteUnAuthroize>
+      <ProtectedRouteUnAuthroize exact path="/god_mode/program/:id"  component={ProgramsEdit}></ProtectedRouteUnAuthroize>
+      <ProtectedRouteUnAuthroize exact path="/god_mode/moderator/:id"  component={ModeratorsEdit}></ProtectedRouteUnAuthroize>
     </Switch>
     </div>
     </Router>
