@@ -27,7 +27,7 @@ function ModeratorMain() {
     }
 
     useEffect(() => {
-        checkRole("PROGRAM_CHANGE_1");
+        checkRole("ROLE_ADMIN");
     }, []);
 
     console.log("role =");

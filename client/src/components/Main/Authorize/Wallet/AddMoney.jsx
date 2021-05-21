@@ -33,10 +33,6 @@ function AddMoney({props}) {
             "Authorization": `Bearer ${localStorage.getItem('jwtToken')}`
         }
         
-        console.log("money =")
-        console.log(money)
-        // alert(headers.Authorization)
-
         axios.post(ADD_MONEY_API,  money , {headers: headers})
           .then(res => {
             alert('Платеж успешно совершен');

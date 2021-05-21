@@ -1,7 +1,7 @@
 import './App.css';
 
 import React, {Component} from "react";
-import {BrowserRouter as Router, Redirect, Route, Switch} from 'react-router-dom'
+import {BrowserRouter as Router, Redirect, Route, Switch} from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import $ from 'jquery';
 import Popper from 'popper.js';
@@ -19,6 +19,7 @@ import Moderators from './components/Moderator/Moderators/Moderators';
 import ProgramsAdd from './components/Moderator/Programs/ProgramsAdd/ProgramsAdd';
 import ProgramsEdit from './components/Moderator/Programs/ProgramsEdit/ProgramsEdit';
 import ModeratorsEdit from './components/Moderator/Moderators/ModeratorsEdit/ModeratorsEdit';
+import PaySchedule from './components/Main/PaySchedule/PaySchedule';
 
 function App() {
   class ProtectedRouteUnAuthroize extends Component {
@@ -72,6 +73,7 @@ function App() {
       <ProtectedRouteUnAuthroize exact path="/god_mode/program_add"  component={ProgramsAdd}></ProtectedRouteUnAuthroize>
       <ProtectedRouteUnAuthroize exact path="/god_mode/program/:id"  component={ProgramsEdit}></ProtectedRouteUnAuthroize>
       <ProtectedRouteUnAuthroize exact path="/god_mode/moderator/:id"  component={ModeratorsEdit}></ProtectedRouteUnAuthroize>
+      <ProtectedRouteUnAuthroize exact path="/pay_schedule/:id"  component={PaySchedule}></ProtectedRouteUnAuthroize>
     </Switch>
     </div>
     </Router>

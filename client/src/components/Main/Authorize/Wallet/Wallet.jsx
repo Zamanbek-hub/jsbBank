@@ -100,9 +100,56 @@ function Wallet() {
         getLastInvest();
     }, {});
 
-    let next_invest = new Date(invest.stamp);
-    next_invest.setDate(next_invest.getDate() + 30);
-    let next_invest_str = `${next_invest.getDay()}.${next_invest.getMonth()}.${next_invest.getFullYear()} г`
+    const GET_NEXT_PAY_API = 'http://localhost:8000/pay_schedule/get_not_payed_first';
+    const [nextPay, setNextPay] = useState({});
+    const getNextPay = () =>  {
+        const headers = {
+            "Authorization": `Bearer ${localStorage.getItem('jwtToken')}`
+        }
+
+        axios.get(GET_NEXT_PAY_API, {headers:headers}).then(res => {
+            setNextPay(res.data)
+        });
+    }
+
+    useEffect(() => {
+        getNextPay();
+    }, {});
+
+    const GET_ATTACHED_PROGRAM = 'http://localhost:8000/pay_schedule/get_attached_program';
+    const [attachedProgram, setAttachedProgram] = useState({});
+    const getAttachedProgram = () =>  {
+        const headers = {
+            "Authorization": `Bearer ${localStorage.getItem('jwtToken')}`
+        }
+
+        axios.get(GET_ATTACHED_PROGRAM, {headers:headers}).then(res => {
+            setAttachedProgram(res.data)
+        });
+
+        console.log("attached program =");
+        console.log(attachedProgram);
+
+    }
+
+    useEffect(() => {
+        getAttachedProgram();
+    }, {});
+
+    const beautifyDate = date => {
+        if(date < 10){
+            return `0${date}`;
+        }
+
+        return date;
+    }
+
+    const bigNumToDate = (stamp) => {
+        let date = new Date(stamp);
+        let date_str = `${beautifyDate(date.getDay() + 1)}.${beautifyDate(date.getMonth() + 1)}.${beautifyDate(date.getFullYear())} г`;
+        
+        return date_str;
+    }
 
     const CalculateRest = (wallet) => {
         return 1500000 - wallet;
@@ -137,7 +184,7 @@ function Wallet() {
                                     </div>
                                     <div>
                                         <h4 className="card-title my-auto" style={last_added_money}>7500 тг</h4>
-                                        <p className="card-title my-auto mt-2" style={next_pay}>Следующий взнос до {next_invest_str}</p>
+                                        <p className="card-title my-auto mt-2" style={next_pay}>Следующий взнос до {bigNumToDate(invest.stamp)}</p>
                                     </div>
                                 </div>
 
@@ -145,11 +192,21 @@ function Wallet() {
                                     <div className='text-center' style={dot_div_style}>
                                         <span className="dot" style={pay_dot_style}></span>
                                     </div>
+                                    { nextPay ?
                                     <div className=''>
-                                    
+                                        <h4 className="card-title my-auto" style={last_added_money}>{nextPay.amount} тг</h4>
+                                        <p className="card-title my-auto mt-2" style={next_pay}>
+                                            <a href={`/pay_schedule/${attachedProgram.id}`} className='next_pay'>
+                                                Следующий платеж до {bigNumToDate(nextPay.stamp)} г
+                                            </a>
+                                        </p>
+                                    </div>
+                                    : 
+                                    <div className=''>
                                         <h4 className="card-title my-auto" style={last_added_money}>7500 тг</h4>
                                         <p className="card-title my-auto mt-2" style={next_pay}>Следующий платеж до 31.05.2021 г</p>
-                                    </div>
+                                    </div>   
+                                    }
                                 </div>
                             </div>
                             <div className='col-6 container'>

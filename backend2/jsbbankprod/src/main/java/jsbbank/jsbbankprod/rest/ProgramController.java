@@ -1,19 +1,20 @@
 package jsbbank.jsbbankprod.rest;
 
 import jsbbank.jsbbankprod.entities.Invest;
+import jsbbank.jsbbankprod.entities.PaySchedule;
 import jsbbank.jsbbankprod.entities.Program;
 import jsbbank.jsbbankprod.entities.Users;
-import jsbbank.jsbbankprod.services.InvestService;
-import jsbbank.jsbbankprod.services.ProgramService;
-import jsbbank.jsbbankprod.services.RolesService;
-import jsbbank.jsbbankprod.services.UserService;
+import jsbbank.jsbbankprod.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +30,9 @@ public class ProgramController {
 
     @Autowired
     private ProgramService programService;
+
+    @Autowired
+    private PayScheduleService payScheduleService;
 
     @PostMapping(value = "/create_program")
     public Program createProgram(@RequestBody Program program){
@@ -47,34 +51,86 @@ public class ProgramController {
         return programService.findAllPrograms();
     }
 
+    @GetMapping("/is_my")
+    public Program isMyProgram(@RequestParam("id") Long id) {
+        Users user = getUser();
+        Program program = programService.findProgramById(id);
+        List<Users> program_users = program.getUsers();
+
+        for(Users p_user: program_users){
+            if(p_user.getId().equals(user.getId())){
+                return program;
+
+            }
+        }
+
+        return null;
+    }
+
     @GetMapping("/get")
     public Program getProgram(@RequestParam("id") Long id) {
         return programService.findProgramById(id);
     }
 
-    @PostMapping(value = "/c")
-    public List<Program> attachProgram(@RequestBody Map<String, String> payload){
-        Program program = programService.findProgramById(Long.parseLong(payload.get("id")));
-
+    @PostMapping(value = "/attach_program")
+    public Program attachProgram(@RequestBody Map<String, String> payload){
+        Program program = programService.findProgramById(Long.parseLong(payload.get("program_id")));
         Users user = getUser();
-        List<Program> user_programs = user.getPrograms();
+        assert user != null;
 
-        if(! user_programs.contains(program)){
-            user_programs.add(program);
+        List<Users> program_users = program.getUsers();
+        program_users.add(user);
+        programService.saveProgram(program);
+
+        Calendar cal = Calendar.getInstance();
+        Date date = new Date(cal.getTime().getTime());
+
+        PaySchedule initPaySchedule = new PaySchedule();
+        initPaySchedule.setAmount(user.getWallet());
+        initPaySchedule.setPaid(true);
+        initPaySchedule.setProgram(program);
+        initPaySchedule.setUser(user);
+        initPaySchedule.setStamp(date);
+        payScheduleService.save(initPaySchedule);
+
+        double debt = program.getLoan_amount() - user.getWallet();
+        long debt_rate = program.getLoan_term() * 12;
+        double month_debt = debt / debt_rate;
+        month_debt = round(month_debt, 2);
+
+        for(int i = 0; i < debt_rate; i++){
+            cal.add(Calendar.MONTH, 1);
+            date = new Date(cal.getTime().getTime());
+
+            PaySchedule paySchedule = new PaySchedule();
+            paySchedule.setAmount(month_debt);
+            paySchedule.setPaid(false);
+            paySchedule.setProgram(program);
+            paySchedule.setUser(user);
+            paySchedule.setStamp(date);
+
+            payScheduleService.save(paySchedule);
         }
 
-        user.setPrograms(user_programs);
+        user.setWallet(0);
         userService.saveUser(user);
-
-        return user_programs;
+        return program;
     }
 
     private Users getUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(!(authentication instanceof AnonymousAuthenticationToken)){
-            Users user = (Users) authentication.getPrincipal();
-            return user;
+            return (Users) authentication.getPrincipal();
         }
         return null;
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        long factor = (long) Math.pow(10, places);
+        value = value * factor;
+        long tmp = Math.round(value);
+        return (double) tmp / factor;
     }
 }

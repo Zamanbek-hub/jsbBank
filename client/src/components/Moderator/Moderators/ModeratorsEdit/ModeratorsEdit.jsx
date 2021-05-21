@@ -33,7 +33,7 @@ function ModeratorsEdit() {
             "Authorization": `Bearer ${localStorage.getItem('jwtToken')}`
         }
 
-        axios.get(ROLES_GET_API, {headers: headers}).then(res => {
+        axios.get(ROLES_GET_API+`?id=${match.params.id}`, {headers: headers}).then(res => {
             setRoles(res.data)
         });
     }
@@ -48,6 +48,7 @@ function ModeratorsEdit() {
 
     const UpdateRole = (role) => {
         const newRole = {
+            id: match.params.id,
             role: role
         }
 

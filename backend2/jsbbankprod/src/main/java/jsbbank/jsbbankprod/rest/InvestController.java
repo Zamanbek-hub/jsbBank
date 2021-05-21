@@ -43,8 +43,7 @@ public class InvestController {
     private Users getUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(!(authentication instanceof AnonymousAuthenticationToken)){
-            Users user = (Users) authentication.getPrincipal();
-            return user;
+            return (Users) authentication.getPrincipal();
         }
         return null;
     }

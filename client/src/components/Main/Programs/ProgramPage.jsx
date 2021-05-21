@@ -1,6 +1,7 @@
 import React from 'react';
 import './ProgramPage.css';
 import axios from "axios";
+import { useHistory } from 'react-router-dom';
 import { useRouteMatch } from 'react-router-dom';
 import { useState,  useEffect } from 'react';
 
@@ -26,27 +27,43 @@ function ProgramPage() {
     const PROGRAM_ATTACH_API = "http://localhost:8000/program/attach_program";
     const history = useHistory();
 
-    const attachProgram = () => {
-        const obj = {
-            id: match.params.id,
-        }
+    const attachProgram = event => {
+        const data = {
+            program_id: program.id,
+        } 
 
         const headers = {
             "Authorization": `Bearer ${localStorage.getItem('jwtToken')}`
         }
-
-        console.log("attachProgram =");
-        console.log(attachProgram);
-        // alert(headers.Authorization)
-
-        axios.post(PROGRAM_ATTACH_API, obj, {headers: headers})
+        
+        axios.post(PROGRAM_ATTACH_API,  data , {headers: headers})
           .then(res => {
-            alert('Заявка принята успешно');
-            history.push(`/`)
+            alert('Вы успешно взяли программу');
+            window.location.reload(); 
         }).catch(err=> {
             alert("Вышла ошибка");
         })
+
     }
+
+    const IS_MY_PROGRAM_API = "http://localhost:8000/program/is_my";
+
+    const [myProgram, setMyProgram] = useState({});
+    const getMyProgram = () => {
+        const headers = {
+            "Authorization": `Bearer ${localStorage.getItem('jwtToken')}`
+        }
+
+        console.log("myProgram =");
+        console.log(myProgram)
+        axios.get(IS_MY_PROGRAM_API+`?id=${match.params.id}`, {headers: headers}).then(res => {
+            setMyProgram(res.data)
+        });
+    }
+
+    useEffect(() => {
+        getMyProgram();
+    }, {});
 
     return (
         <div className='container mt-5'>
@@ -78,9 +95,14 @@ function ProgramPage() {
                         <h4>Сумма займа</h4>
                     </div>
                 </div>
-                <a to=''>
+
+                {myProgram ?
+                <div></div>
+                :
+                <form onSubmit={e => { e.preventDefault(); attachProgram(e)}}>
                     <button className='program_take'>Подать заявку</button>
-                </a>
+                </form>
+                }
             </div>
             <br />
             <br />

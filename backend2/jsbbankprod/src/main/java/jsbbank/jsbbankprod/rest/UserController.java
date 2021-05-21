@@ -121,8 +121,7 @@ public class UserController {
     private Users getUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(!(authentication instanceof AnonymousAuthenticationToken)){
-            Users user = (Users) authentication.getPrincipal();
-            return user;
+            return (Users) authentication.getPrincipal();
         }
         return null;
     }
@@ -141,12 +140,10 @@ public class UserController {
         invest.setDate(date);
         invest.setUser(user);
         investService.saveInvest(invest);
-        System.out.println(invest);
 
         double wallet = user.getWallet() + added;
         user.setWallet(wallet);
         userService.saveUser(user);
-        System.out.println(user);
     }
 
 }

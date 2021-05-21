@@ -37,7 +37,7 @@ function Login() {
           .then(res => {
             localStorage.setItem('jwtToken', res['data']['jwtToken']);
             localStorage.setItem('email', loginData.email);
-            history.push("")
+            window.location.reload();
         }).catch(err=> {
             console.log(err)
             alert("Invalid username or login");

@@ -31,10 +31,10 @@ public class RolesController {
     private ProgramService programService;
 
     @GetMapping(value = "/get_roles")
-    public List<RoleEasy> getRoles(){
+    public List<RoleEasy> getRoles(@RequestParam("id") Long id){
         List<Roles> roles = rolesService.findAll();
 
-        Users user = getUser();
+        Users user = userService.findById(id);
         assert user != null;
         List<Roles> user_roles = user.getRoles();
 
@@ -56,7 +56,8 @@ public class RolesController {
     public void setRoleToUSer(@RequestBody Map<String, String> payload){
         Roles role = rolesService.getRole(payload.get("role"));
 
-        Users user = getUser();
+
+        Users user = userService.findById(Long.parseLong(payload.get("id")));
         assert user != null;
         List<Roles> user_roles = user.getRoles();
 
@@ -91,8 +92,7 @@ public class RolesController {
     private Users getUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(!(authentication instanceof AnonymousAuthenticationToken)){
-            Users user = (Users) authentication.getPrincipal();
-            return user;
+            return (Users) authentication.getPrincipal();
         }
         return null;
     }

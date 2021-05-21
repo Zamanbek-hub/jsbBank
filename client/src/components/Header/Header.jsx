@@ -1,7 +1,9 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import ModeratorMain from '../Moderator/ModeratorMain';
-import './Header.css'
+import './Header.css';
+import axios from "axios";
+import { useState,  useEffect } from 'react';
 
 function Header() {
     const history = useHistory();
@@ -19,6 +21,26 @@ function Header() {
         document.getElementById("main").style.marginLeft = "250px";
         document.body.style.backgroundColor = "rgba(0,0,0,0.4)";
     }
+
+    const PROGRAM_ADD_API = "http://localhost:8000/roles/have_role";
+
+    const [role, setRole] = useState({});
+    const checkRole = (role) => {
+        const headers = {
+            "Authorization": `Bearer ${localStorage.getItem('jwtToken')}`
+        }
+
+        axios.get(PROGRAM_ADD_API+`?role=${role}`, {headers: headers}).then(res => {
+            setRole({have:res.data})
+        });
+    }
+
+    useEffect(() => {
+        checkRole("PROGRAM_CHANGE_1");
+    }, []);
+
+    console.log("role =");
+    console.log(role)
     
     return (
         <div>
@@ -46,14 +68,19 @@ function Header() {
 
                         { localStorage.getItem('jwtToken') &&
                             <li className="nav-item">
-                                <a type="button" className="nav-link" style={nav_link_style}  onClick={e => { e.preventDefault(); {localStorage.removeItem('jwtToken'); history.push("/login")}}}>Logout</a>
+                                <a type="button" className="nav-link" style={nav_link_style}  onClick={e => { e.preventDefault(); {localStorage.removeItem('jwtToken'); localStorage.removeItem('email'); history.push("/login"); window.location.reload(); }}}>Logout</a>
                             </li>
                         }
 
-                        
-                        { localStorage.getItem('jwtToken') &&
+                        {role.have &&
                             <li className="nav-item">
                                 <span  className="nav-link moderator" style={nav_link_style} onClick={e => { e.preventDefault(); openNav()}}>Moderator</span>
+                            </li>
+                        }
+
+                        { localStorage.getItem('email') &&
+                            <li className="nav-item profile_link">
+                                <a type="button" className="nav-link" style={nav_link_style}>{localStorage.getItem('email')}</a>
                             </li>
                         }
                     </ul>

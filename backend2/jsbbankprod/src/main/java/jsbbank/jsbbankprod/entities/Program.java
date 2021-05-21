@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Program {
-    public Program(String name, double loan_rate, double initial_fond, double loan_term, double loan_amount, Date stamp) {
+    public Program(String name, double loan_rate, double initial_fond, long loan_term, long loan_amount, Date stamp) {
         this.name = name;
         this.loan_rate = loan_rate;
         this.initial_fond = initial_fond;
@@ -41,13 +41,16 @@ public class Program {
     private double initial_fond;
 
     @Column(name = "loan_term")
-    private double loan_term;
+    private long loan_term;
 
     @Column(name = "loan_amount")
-    private double loan_amount;
+    private long loan_amount;
 
     @Column(name = "stamp")
     private Date stamp;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Users> users;
 
     @Override
     public String toString() {
